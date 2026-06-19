@@ -212,6 +212,7 @@ function parseCSV(text) {
   const start = (header.includes('posici') || header.includes('lugar') || header.includes('apodo') || header.includes('pos')) ? 1 : 0;
   // Lee el corte desde R1
   const firstRow = lines[0].split(',').map(c => c.trim().replace(/^"|"$/g,''));
+  const jornadaLabel = firstRow[5] || '';
   const corteLabel = firstRow[17] || '';
   const data = lines.slice(start).map(line => {
     const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g,''));
@@ -233,11 +234,11 @@ async function loadData() {
     const res = await fetch(SHEET_CSV_URL);
     if(!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
-    const { data, corteLabel } = parseCSV(text);
+    const { data, jornadaLabel, corteLabel } = parseCSV(text);
     ALL = data;
     if(ALL.length === 0) throw new Error('El CSV no tiene datos válidos.');
 
-    document.getElementById('badge-corte').textContent = corteLabel ? 'Corte: ' + corteLabel : 'Ritmos 2026';
+    document.getElementById('badge-corte').textContent = jornadaLabel ? 'Corte: ' + jornadaLabel : 'Ritmos 2026';
     document.getElementById('corte-label').textContent = corteLabel ? 'Última actualización: ' + corteLabel : '';
     document.getElementById('spinner').style.display = 'none';
     document.getElementById('table').style.display = 'table';

@@ -358,7 +358,7 @@ function render(){
   if(rows.length===0){tbody.innerHTML='';noRes.style.display='block';return}
   noRes.style.display='none';
   tbody.innerHTML=rows.map(r=>{
-    const isMe=r.alias==='Carlitos';
+    const isMe=false;
     return`<tr class="${isMe?'me':''}">
       <td class="col-pos">${posLabel(r.pos)}</td>
       <td class="col-alias">${isMe?'<strong>'+r.alias+' ⭐</strong>':r.alias}</td>

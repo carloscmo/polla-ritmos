@@ -214,8 +214,8 @@ function parseCSV(text) {
   const firstRow = lines[0].split(',').map(c => c.trim().replace(/^"|"$/g,''));
   const corteLabel = firstRow[5] || '';
   const data = lines.slice(start).map(line => {
+    const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g,''));
     return { pos: parseInt(cols[0]), alias: cols[2], pts: parseInt(cols[1]) };
-    return { pos: parseInt(cols[0]), alias: cols[1], pts: parseInt(cols[2]) };
   }).filter(r => !isNaN(r.pos) && r.alias && !isNaN(r.pts));
   return { data, corteLabel };
 }

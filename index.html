@@ -210,9 +210,9 @@ function parseCSV(text) {
   const lines = text.trim().split('\n').map(l => l.replace(/\r/,''));
   const header = lines[0].toLowerCase();
   const start = (header.includes('posici') || header.includes('lugar') || header.includes('apodo') || header.includes('pos')) ? 1 : 0;
-  // Lee el corte desde F1 (columna índice 5 de la primera fila)
+  // Lee el corte desde R1
   const firstRow = lines[0].split(',').map(c => c.trim().replace(/^"|"$/g,''));
-  const corteLabel = firstRow[17] || '';
+  const corteLabel = firstRow[18] || '';
   const data = lines.slice(start).map(line => {
     const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g,''));
     return { pos: parseInt(cols[0]), alias: cols[2], pts: parseInt(cols[1]) };

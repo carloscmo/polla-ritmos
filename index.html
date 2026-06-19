@@ -163,10 +163,9 @@
 
 <script>
 // ─────────────────────────────────────────────
-//  CONFIGURACIÓN — solo editar estas dos líneas
+//  CONFIGURACIÓN
 // ─────────────────────────────────────────────
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHRF1IXgiI7vPbEvpaMsreeIfkqnP0N32sFQu1t4W7GsSPgqdJx6HBSCa9sWq_iCCQwhdLiz3Dz1a5/pub?gid=0&single=true&output=csv";
-const CORTE_LABEL   = "Jornada 1 · 2026-06-17";
 // ─────────────────────────────────────────────
 
 let ALL = [], sortKey = 'pos', sortDir = 1;
@@ -209,13 +208,16 @@ function render() {
 
 function parseCSV(text) {
   const lines = text.trim().split('\n').map(l => l.replace(/\r/,''));
-  // Detecta automáticamente si la primera fila es encabezado
   const header = lines[0].toLowerCase();
-  const start = (header.includes('lugar') || header.includes('apodo') || header.includes('pos')) ? 1 : 0;
-  return lines.slice(start).map(line => {
+  const start = (header.includes('posici') || header.includes('lugar') || header.includes('apodo') || header.includes('pos')) ? 1 : 0;
+  // Lee el corte desde F1 (columna índice 5 de la primera fila)
+  const firstRow = lines[0].split(',').map(c => c.trim().replace(/^"|"$/g,''));
+  const corteLabel = firstRow[5] || '';
+  const data = lines.slice(start).map(line => {
     const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g,''));
     return { pos: parseInt(cols[0]), alias: cols[1], pts: parseInt(cols[2]) };
   }).filter(r => !isNaN(r.pos) && r.alias && !isNaN(r.pts));
+  return { data, corteLabel };
 }
 
 async function loadData() {
@@ -231,11 +233,12 @@ async function loadData() {
     const res = await fetch(SHEET_CSV_URL);
     if(!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
-    ALL = parseCSV(text);
+    const { data, corteLabel } = parseCSV(text);
+    ALL = data;
     if(ALL.length === 0) throw new Error('El CSV no tiene datos válidos.');
 
-    document.getElementById('badge-corte').textContent = 'Corte: ' + CORTE_LABEL;
-    document.getElementById('corte-label').textContent = 'Última actualización: ' + CORTE_LABEL;
+    document.getElementById('badge-corte').textContent = corteLabel ? 'Corte: ' + corteLabel : 'Ritmos 2026';
+    document.getElementById('corte-label').textContent = corteLabel ? 'Última actualización: ' + corteLabel : '';
     document.getElementById('spinner').style.display = 'none';
     document.getElementById('table').style.display = 'table';
     render();

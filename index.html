@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polla Mundialista · Academia Ritmos 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.14.0/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #eeece8;
+    --text: #1a1a1a;
+    --text2: #666660;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --purple-light: #EEEDFE;
+    --purple-mid: #7F77DD;
+    --purple: #534AB7;
+    --purple-dark: #3C3489;
+    --purple-darkest: #26215C;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1e;
+      --bg2: #2a2a2a;
+      --bg3: #333333;
+      --text: #f0f0f0;
+      --text2: #999990;
+      --border: rgba(255,255,255,0.12);
+      --border2: rgba(255,255,255,0.22);
+      --purple-light: #2a2750;
+      --purple-mid: #7F77DD;
+      --purple: #9B93E8;
+      --purple-dark: #AFA9EC;
+      --purple-darkest: #CECBF6;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg3);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 1.5rem 1rem;
+  }
+  #container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  header {
+    background: var(--purple);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #fff;
+  }
+  header .logo-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 20px; font-weight: 500; line-height: 1.2; }
+  header p { font-size: 13px; opacity: 0.8; margin-top: 3px; }
+  .badge-corte {
+    margin-left: auto;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  #controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  #search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 160px;
+  }
+  #search-wrap i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--text2);
+    pointer-events: none;
+  }
+  #search {
+    width: 100%;
+    padding: 0 10px 0 34px;
+    height: 38px;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border2);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+  }
+  #search:focus { border-color: var(--purple-mid); box-shadow: 0 0 0 3px rgba(127,119,221,0.15); }
+  .sort-btn {
+    height: 38px;
+    padding: 0 14px;
+    font-size: 13px;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border2);
+    background: var(--bg);
+    color: var(--text2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .sort-btn:hover { background: var(--bg2); }
+  .sort-btn.active {
+    background: var(--purple-light);
+    color: var(--purple-dark);
+    border-color: var(--purple-mid);
+    font-weight: 500;
+  }
+  #count {
+    font-size: 13px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+  #tbl-wrap {
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    overflow: hidden;
+    background: var(--bg);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--bg2); }
+  th {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    text-align: left;
+    border-bottom: 0.5px solid var(--border);
+  }
+  th.col-pos { width: 64px; text-align: center; }
+  th.col-pts { width: 110px; text-align: right; }
+  td {
+    padding: 9px 14px;
+    font-size: 14px;
+    color: var(--text);
+    border-bottom: 0.5px solid var(--border);
+  }
+  td.col-pos { text-align: center; font-size: 13px; color: var(--text2); }
+  td.col-alias { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.col-pts { text-align: right; }
+  tr:last-child td { border-bottom: none; }
+  tr.me { background: var(--purple-light); }
+  tr.me td { color: var(--purple-darkest); }
+  tr.me td.col-pos { color: var(--purple); font-weight: 500; }
+  .pts-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    min-width: 52px;
+  }
+  tr.me .pts-pill {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+  }
+  #no-results {
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--text2);
+    font-size: 14px;
+  }
+  footer {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text2);
+  }
+</style>
+</head>
+<body>
+<div id="container">
+
+  <header>
+    <div class="logo-icon">⚽</div>
+    <div>
+      <h1>Polla Mundialista · Ritmos</h1>
+      <p>FIFA World Cup 2026 — Ranking general</p>
+    </div>
+    <span class="badge-corte">Corte: 2026-06-17</span>
+  </header>
+
+  <div id="controls">
+    <div id="search-wrap">
+      <i class="ti ti-search"></i>
+      <input id="search" type="text" placeholder="Buscar apodo..." oninput="render()">
+    </div>
+    <button class="sort-btn active" id="btn-pos" onclick="setSort('pos')">
+      <i class="ti ti-trophy"></i>Posición
+    </button>
+    <button class="sort-btn" id="btn-pts" onclick="setSort('pts')">
+      <i class="ti ti-star"></i>Puntos
+    </button>
+    <span id="count"></span>
+  </div>
+
+  <div id="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-pos">Lugar</th>
+          <th>Apodo</th>
+          <th class="col-pts">Pts acum</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="no-results" style="display:none">Sin resultados para tu búsqueda.</div>
+  </div>
+
+  <footer>Datos extraídos de Google Forms y procesados por el equipo de Academia Ritmos · Jornada 1</footer>
+
+</div>
+
+<script>
+const ALL=[
+  {pos:1,alias:"Lili",pts:56},{pos:2,alias:"Alejandro Gómez",pts:52},{pos:2,alias:"Diany",pts:52},
+  {pos:2,alias:"Luengas",pts:52},{pos:2,alias:"Mimo2026",pts:52},{pos:3,alias:"Julián Vega el primo de Samy Vega la mejor",pts:51},
+  {pos:4,alias:"El Chaval Juanjo",pts:50},{pos:4,alias:"Johann",pts:50},{pos:4,alias:"Leidy Vaca",pts:50},
+  {pos:5,alias:"Gonzo",pts:49},{pos:5,alias:"Puma",pts:49},{pos:5,alias:"Yoly",pts:49},
+  {pos:6,alias:"Beto8009",pts:48},{pos:6,alias:"Machasa",pts:48},{pos:6,alias:"Maye",pts:48},
+  {pos:6,alias:"Miguel",pts:48},{pos:6,alias:"Niky",pts:48},{pos:7,alias:"Gómez",pts:47},
+  {pos:7,alias:"Silvon",pts:47},{pos:8,alias:"ANGEL",pts:46},{pos:8,alias:"Fredo",pts:46},
+  {pos:8,alias:"jaime",pts:46},{pos:8,alias:"Yeisson Rodríguez",pts:46},{pos:8,alias:"Yolimalug",pts:46},
+  {pos:9,alias:"Felipe Ángel",pts:45},{pos:9,alias:"Fisiosan",pts:45},{pos:9,alias:"Ginna",pts:45},
+  {pos:9,alias:"Hanzuo",pts:45},{pos:9,alias:"PONY",pts:45},{pos:10,alias:"Carpo",pts:44},
+  {pos:10,alias:"Checho (Augusto)",pts:44},{pos:10,alias:"Facerra",pts:44},{pos:10,alias:"Javieracing10",pts:44},
+  {pos:10,alias:"Julius",pts:44},{pos:10,alias:"Lobo 357",pts:44},{pos:10,alias:"Vikinga",pts:44},
+  {pos:11,alias:"3247374618",pts:43},{pos:11,alias:"Angie🦋",pts:43},{pos:11,alias:"CARLI",pts:43},
+  {pos:11,alias:"Camila U",pts:43},{pos:11,alias:"El Zancudo",pts:43},{pos:11,alias:"Hockey97",pts:43},
+  {pos:11,alias:"JAVI (Eduardo)",pts:43},{pos:11,alias:"Lobatron",pts:43},{pos:11,alias:"Lozano",pts:43},
+  {pos:11,alias:"Luisadepordios",pts:43},{pos:11,alias:"LUZMACL",pts:43},{pos:11,alias:"Niñoencho",pts:43},
+  {pos:11,alias:"S_rico",pts:43},{pos:11,alias:"TIMOTÈ",pts:43},{pos:11,alias:"Toño",pts:43},
+  {pos:11,alias:"Víctor Hugo.",pts:43},{pos:12,alias:"Aldana",pts:42},{pos:12,alias:"Carlitos",pts:42},
+  {pos:12,alias:"Conchis (Consuelo)",pts:42},{pos:12,alias:"cristiaA/N",pts:42},{pos:12,alias:"El mono (Jhon)",pts:42},
+  {pos:12,alias:"H.R.",pts:42},{pos:12,alias:"Jacqui",pts:42},{pos:12,alias:"Juanma Torres",pts:42},
+  {pos:12,alias:"Julián",pts:42},{pos:12,alias:"Luar",pts:42},{pos:12,alias:"MagaSz",pts:42},
+  {pos:12,alias:"Rafa",pts:42},{pos:12,alias:"Saide",pts:42},{pos:12,alias:"Solo pálpito menos IA",pts:42},
+  {pos:13,alias:"Aby",pts:41},{pos:13,alias:"AngieC",pts:41},{pos:13,alias:"AnitaCaro",pts:41},
+  {pos:13,alias:"Cristiano Ronaldo",pts:41},{pos:13,alias:"F. Cortés",pts:41},{pos:13,alias:"Fisiolore",pts:41},
+  {pos:13,alias:"Ney2013",pts:41},{pos:13,alias:"Vini P",pts:41},{pos:14,alias:"Blanquita",pts:40},
+  {pos:14,alias:"Caimax",pts:40},{pos:14,alias:"Conchis (Concepción)",pts:40},{pos:14,alias:"Daer",pts:40},
+  {pos:14,alias:"El jefe",pts:40},{pos:14,alias:"Fabis",pts:40},{pos:14,alias:"Jocho",pts:40},
+  {pos:14,alias:"JohaSilva",pts:40},{pos:14,alias:"John (Herrera)",pts:40},{pos:14,alias:"Kai",pts:40},
+  {pos:14,alias:"Las bailarinas",pts:40},{pos:14,alias:"LLORENTE",pts:40},{pos:14,alias:"Lore",pts:40},
+  {pos:14,alias:"Luigi",pts:40},{pos:14,alias:"Luz Torres",pts:40},{pos:14,alias:"Maple",pts:40},
+  {pos:14,alias:"Memo",pts:40},{pos:14,alias:"Mono (José)",pts:40},{pos:14,alias:"Negro",pts:40},
+  {pos:14,alias:"PITY",pts:40},{pos:14,alias:"Pupi",pts:40},{pos:14,alias:"TopGun",pts:40},
+  {pos:14,alias:"VICRUB",pts:40},{pos:14,alias:"VivianaNumpaque",pts:40},{pos:15,alias:"\"Mosquera30\"",pts:39},
+  {pos:15,alias:"AndresRM",pts:39},{pos:15,alias:"Camachito",pts:39},{pos:15,alias:"Chris El Negro",pts:39},
+  {pos:15,alias:"Chunatis",pts:39},{pos:15,alias:"Dora",pts:39},{pos:15,alias:"ElDiegoNo",pts:39},
+  {pos:15,alias:"Fernanda",pts:39},{pos:15,alias:"Lucho Urrego",pts:39},{pos:15,alias:"Max",pts:39},
+  {pos:15,alias:"Nan",pts:39},{pos:15,alias:"Poporosa",pts:39},{pos:15,alias:"Ricky",pts:39},
+  {pos:15,alias:"Rosa Dilia",pts:39},{pos:15,alias:"Vivi",pts:39},{pos:16,alias:"Alexander M",pts:38},
+  {pos:16,alias:"BRIAZUCENA",pts:38},{pos:16,alias:"Charlie",pts:38},{pos:16,alias:"Joan",pts:38},
+  {pos:16,alias:"Jóse González",pts:38},{pos:16,alias:"Ktp",pts:38},{pos:16,alias:"La taca taca",pts:38},
+  {pos:16,alias:"Leo",pts:38},{pos:16,alias:"Leona",pts:38},{pos:16,alias:"Margara+1",pts:38},
+  {pos:16,alias:"NENE",pts:38},{pos:16,alias:"Pilar",pts:38},{pos:16,alias:"Pinta",pts:38},
+  {pos:16,alias:"SHREK CON PELO",pts:38},{pos:17,alias:"ADRIANA M",pts:37},{pos:17,alias:"Camiolin",pts:37},
+  {pos:17,alias:"Diana C. Rodríguez",pts:37},{pos:17,alias:"Dylan",pts:37},{pos:17,alias:"Giovanny Vega papá samy",pts:37},
+  {pos:17,alias:"J.Blanco",pts:37},{pos:17,alias:"Jhon_ATF",pts:37},{pos:17,alias:"Laura U",pts:37},
+  {pos:17,alias:"LeoLeal",pts:37},{pos:17,alias:"Leon",pts:37},{pos:17,alias:"Luis",pts:37},
+  {pos:17,alias:"Mariale",pts:37},{pos:17,alias:"Mile",pts:37},{pos:17,alias:"Nathalia Vargas",pts:37},
+  {pos:17,alias:"Natys0808",pts:37},{pos:17,alias:"Pacosta",pts:37},{pos:17,alias:"Sagemina•0225",pts:37},
+  {pos:17,alias:"Valery",pts:37},{pos:18,alias:"Alejo",pts:36},{pos:18,alias:"Checho (Stiven)",pts:36},
+  {pos:18,alias:"Claus",pts:36},{pos:18,alias:"diego chamo",pts:36},{pos:18,alias:"Ney2026",pts:36},
+  {pos:18,alias:"OlgaLu",pts:36},{pos:18,alias:"Pedraza dancer",pts:36},{pos:18,alias:"Yaha",pts:36},
+  {pos:19,alias:"Abel",pts:35},{pos:19,alias:"Alejandra H",pts:35},{pos:19,alias:"Axelneo",pts:35},
+  {pos:19,alias:"Balbina",pts:35},{pos:19,alias:"Ceci",pts:35},{pos:19,alias:"Flober golll",pts:35},
+  {pos:19,alias:"Harold",pts:35},{pos:19,alias:"Jaime Rodríguez",pts:35},{pos:19,alias:"Javi (Néstor)",pts:35},
+  {pos:19,alias:"Juli",pts:35},{pos:19,alias:"Linis",pts:35},{pos:19,alias:"Margarita",pts:35},
+  {pos:19,alias:"MJT",pts:35},{pos:19,alias:"SandraN",pts:35},{pos:20,alias:"ANIBAL",pts:34},
+  {pos:20,alias:"CHARLY",pts:34},{pos:20,alias:"Isabelgr",pts:34},{pos:20,alias:"jalvach",pts:34},
+  {pos:20,alias:"La monita",pts:34},{pos:20,alias:"LOREH17",pts:34},{pos:20,alias:"Mr B",pts:34},
+  {pos:20,alias:"Oliver Varón",pts:34},{pos:21,alias:"Chala",pts:33},{pos:21,alias:"George",pts:33},
+  {pos:21,alias:"HORACIOPV",pts:33},{pos:21,alias:"Natica",pts:33},{pos:21,alias:"Venezia",pts:33},
+  {pos:22,alias:"Andru Y Yeison",pts:32},{pos:22,alias:"Ayvinia",pts:32},{pos:22,alias:"BERMU",pts:32},
+  {pos:22,alias:"BETO",pts:32},{pos:22,alias:"Blanca P",pts:32},{pos:22,alias:"Caponera",pts:32},
+  {pos:22,alias:"Don Polo",pts:32},{pos:22,alias:"Isa Barajas",pts:32},{pos:22,alias:"Jilber",pts:32},
+  {pos:22,alias:"Julian",pts:32},{pos:22,alias:"Luis Hernandez",pts:32},{pos:22,alias:"María C",pts:32},
+  {pos:22,alias:"Mcnolius",pts:32},{pos:22,alias:"Venus",pts:32},{pos:22,alias:"Vivito",pts:32},
+  {pos:23,alias:"España",pts:31},{pos:23,alias:"Klaus",pts:31},{pos:23,alias:"Mafe moreno",pts:31},
+  {pos:23,alias:"Pelos1308",pts:31},{pos:23,alias:"Peluka",pts:31},{pos:24,alias:"Ana Mile",pts:30},
+  {pos:24,alias:"Anyelo",pts:30},{pos:24,alias:"David",pts:30},{pos:24,alias:"Diluca",pts:30},
+  {pos:24,alias:"FútbolChampán",pts:30},{pos:24,alias:"Gabriel bike",pts:30},{pos:24,alias:"LACINDY",pts:30},
+  {pos:24,alias:"Leidyk",pts:30},{pos:24,alias:"Luismi dance",pts:30},{pos:24,alias:"WILL MUNDIALISTA",pts:30},
+  {pos:25,alias:"CaroVarg",pts:29},{pos:25,alias:"Dfelibert",pts:29},{pos:25,alias:"Fuan",pts:29},
+  {pos:25,alias:"Sofi Carvajal",pts:29},{pos:25,alias:"Titi",pts:29},{pos:25,alias:"WILSON GUZMAN",pts:29},
+  {pos:26,alias:"hermanas Polo",pts:28},{pos:26,alias:"salentoq2",pts:28},{pos:27,alias:"Dadaram",pts:27},
+  {pos:27,alias:"salentoq",pts:27},{pos:28,alias:"Ciro",pts:26},{pos:28,alias:"DARÍO",pts:26},
+  {pos:28,alias:"Mauro37",pts:26},{pos:28,alias:"Yaloma",pts:26},{pos:29,alias:"RMJuan",pts:25},
+  {pos:30,alias:"DeJan",pts:24},{pos:30,alias:"Mip",pts:24},{pos:31,alias:"Jenny",pts:23},
+  {pos:31,alias:"Roma",pts:23},{pos:32,alias:"John (Bermúdez)",pts:20},{pos:32,alias:"Martinponce",pts:20},
+  {pos:33,alias:"CarmenRosa1",pts:18}
+];
+
+let sortKey='pos', sortDir=1;
+
+function setSort(k){
+  if(sortKey===k){sortDir*=-1}else{sortKey=k;sortDir=k==='pos'?1:-1}
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+k).classList.add('active');
+  render();
+}
+
+function posLabel(p){
+  if(p===1)return'🥇';if(p===2)return'🥈';if(p===3)return'🥉';return'#'+p;
+}
+
+function render(){
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  let rows=ALL.filter(r=>r.alias.toLowerCase().includes(q));
+  rows.sort((a,b)=>{
+    let v=sortKey==='pos'?(a.pos-b.pos):(b.pts-a.pts);
+    if(v===0)v=a.alias.localeCompare(b.alias,'es');
+    return v*sortDir;
+  });
+  const tbody=document.getElementById('tbody');
+  const noRes=document.getElementById('no-results');
+  document.getElementById('count').textContent=rows.length+' jugadores';
+  if(rows.length===0){tbody.innerHTML='';noRes.style.display='block';return}
+  noRes.style.display='none';
+  tbody.innerHTML=rows.map(r=>{
+    const isMe=r.alias==='Carlitos';
+    return`<tr class="${isMe?'me':''}">
+      <td class="col-pos">${posLabel(r.pos)}</td>
+      <td class="col-alias">${isMe?'<strong>'+r.alias+' ⭐</strong>':r.alias}</td>
+      <td class="col-pts"><span class="pts-pill">${r.pts}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>

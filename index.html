@@ -212,7 +212,7 @@ function parseCSV(text) {
   const start = (header.includes('posici') || header.includes('lugar') || header.includes('apodo') || header.includes('pos')) ? 1 : 0;
   // Lee el corte desde R1
   const firstRow = lines[0].split(',').map(c => c.trim().replace(/^"|"$/g,''));
-  const corteLabel = firstRow[18] || '';
+  const corteLabel = firstRow[17] || '';
   const data = lines.slice(start).map(line => {
     const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g,''));
     return { pos: parseInt(cols[0]), alias: cols[2], pts: parseInt(cols[1]) };
